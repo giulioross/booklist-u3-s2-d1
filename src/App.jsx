@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { useState } from "react";
 import "./App.css";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import BookList from "./components/BookList";
@@ -13,53 +13,49 @@ import horror from "./data/books/horror.json";
 import romance from "./data/books/romance.json";
 import scifi from "./data/books/scifi.json";
 
-class App extends Component {
-  state = {
-    books: fantasy,
-    selectedBookAsin: null,
+const App = () => {
+  const [books, setBooks] = useState(fantasy);
+  const [selectedBookAsin, setSelectedBookAsin] = useState(null);
+
+  const handleBookSelect = (asin) => {
+    setSelectedBookAsin(asin);
   };
 
-  handleBookSelect = (asin) => {
-    this.setState({ selectedBookAsin: asin });
-  };
+  return (
+    <>
+      <MyNav />
+      <Welcome />
+      <Container>
+        <div className="d-flex justify-content-center gap-1 my-3">
+          <Button variant="primary" onClick={() => setBooks(fantasy)}>
+            Fantasy
+          </Button>
+          <Button variant="warning" onClick={() => setBooks(history)}>
+            History
+          </Button>
+          <Button variant="danger" onClick={() => setBooks(horror)}>
+            Horror
+          </Button>
+          <Button variant="success" onClick={() => setBooks(romance)}>
+            Romance
+          </Button>
+          <Button variant="info" onClick={() => setBooks(scifi)}>
+            Scifi
+          </Button>
+        </div>
 
-  render() {
-    return (
-      <>
-        <MyNav />
-        <Welcome />
-        <Container>
-          <div className="d-flex justify-content-center gap-1 my-3">
-            <Button variant="primary" onClick={() => this.setState({ books: fantasy })}>
-              Fantasy
-            </Button>
-            <Button variant="warning" onClick={() => this.setState({ books: history })}>
-              History
-            </Button>
-            <Button variant="danger" onClick={() => this.setState({ books: horror })}>
-              Horror
-            </Button>
-            <Button variant="success" onClick={() => this.setState({ books: romance })}>
-              Romance
-            </Button>
-            <Button variant="info" onClick={() => this.setState({ books: scifi })}>
-              Scifi
-            </Button>
-          </div>
-
-          <Row>
-            <Col md={8}>
-              <BookList books={this.state.books} onBookSelect={this.handleBookSelect} />
-            </Col>
-            <Col md={4}>
-              <CommentArea asin={this.state.selectedBookAsin} />
-            </Col>
-          </Row>
-        </Container>
-        <Footer />
-      </>
-    );
-  }
-}
+        <Row>
+          <Col md={8}>
+            <BookList books={books} onBookSelect={handleBookSelect} />
+          </Col>
+          <Col md={4}>
+            <CommentArea asin={selectedBookAsin} />
+          </Col>
+        </Row>
+      </Container>
+      <Footer />
+    </>
+  );
+};
 
 export default App;

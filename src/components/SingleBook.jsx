@@ -1,35 +1,30 @@
-import { Component } from "react";
+import { useState } from "react";
 import { Badge, Card, Col } from "react-bootstrap";
 
-class SingleBook extends Component {
-  state = {
-    selected: false,
+const SingleBook = ({ book, onBookSelect }) => {
+  const [selected, setSelected] = useState(false);
+
+  const handleClick = () => {
+    setSelected((prevSelected) => !prevSelected); // Toggle stato
+    if (onBookSelect) {
+      onBookSelect(book.asin);
+    }
   };
 
-  handleClick = () => {
-    this.setState({ selected: !this.state.selected }, () => {
-      if (this.props.onBookSelect) {
-        this.props.onBookSelect(this.props.book.asin);
-      }
-    });
-  };
-
-  render() {
-    return (
-      <Col>
-        <Card className={this.state.selected ? "border-danger" : ""} onClick={this.handleClick} style={{ cursor: "pointer" }}>
-          <Card.Img variant="top" src={this.props.book.img} />
-          <Card.Body>
-            <Card.Title>{this.props.book.title}</Card.Title>
-            <Card.Text>{this.props.book.category}</Card.Text>
-            <Card.Text>
-              <Badge bg="info">€{this.props.book.price}</Badge>
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      </Col>
-    );
-  }
-}
+  return (
+    <Col>
+      <Card className={selected ? "border-danger" : ""} onClick={handleClick} style={{ cursor: "pointer" }}>
+        <Card.Img variant="top" src={book.img} />
+        <Card.Body>
+          <Card.Title>{book.title}</Card.Title>
+          <Card.Text>{book.category}</Card.Text>
+          <Card.Text>
+            <Badge bg="info">€{book.price}</Badge>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
+};
 
 export default SingleBook;
